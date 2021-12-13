@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model version="5.1.1" links="0">
+ <framework name="qpc"/>
+ <package name="Device" stereotype="0x02">
+  <class name="Device" superclass="qpc::QHsm">
+   <statechart properties="0x01">
+    <initial target="../2">
+     <initial_glyph conn="21,12,4,3,9,16">
+      <action box="0,-2,10,2"/>
+     </initial_glyph>
+    </initial>
+    <state name="On">
+     <entry brief="turnOnPower()"/>
+     <exit brief="turnOffPower()"/>
+     <initial target="../4">
+      <initial_glyph conn="60,53,5,3,7">
+       <action box="0,-2,10,2"/>
+      </initial_glyph>
+     </initial>
+     <tran trig="PowerOff" target="../../2">
+      <tran_glyph conn="56,68,3,2,-13,-41">
+       <action box="-10,-3,10,2"/>
+      </tran_glyph>
+     </tran>
+     <tran trig="Fault" target="../../3">
+      <action brief="reportFault()"/>
+      <tran_glyph conn="123,63,1,3,22">
+       <action box="5,-2,19,3"/>
+      </tran_glyph>
+     </tran>
+     <tran trig="POR" target="..">
+      <tran_glyph conn="105,39,0,1,-12,23,20,-5">
+       <action box="1,-5,10,2"/>
+      </tran_glyph>
+     </tran>
+     <state name="Initializing">
+      <entry brief="initDevice()"/>
+      <exit brief="initExit()"/>
+      <tran trig="Complete" target="../../7">
+       <tran_glyph conn="79,52,1,0,11,11">
+        <action box="2,-2,10,2"/>
+       </tran_glyph>
+      </tran>
+      <state_glyph node="67,49,12,8">
+       <entry box="1,2,11,2"/>
+       <exit box="1,4,11,2"/>
+      </state_glyph>
+     </state>
+     <state name="Driving">
+      <entry brief="startMotor()"/>
+      <exit brief="shutOffMotor()"/>
+      <tran trig="Stop" target="../../7">
+       <tran_glyph conn="115,93,1,1,3,-28,-23">
+        <action box="-8,-28,10,2"/>
+       </tran_glyph>
+      </tran>
+      <tran trig="RTI">
+       <action brief="motorControl()"/>
+       <tran_glyph conn="94,98,3,-1,15">
+        <action box="0,-2,14,4"/>
+       </tran_glyph>
+      </tran>
+      <state_glyph node="94,87,21,14">
+       <entry box="1,2,12,2"/>
+       <exit box="1,4,13,3"/>
+      </state_glyph>
+     </state>
+     <state name="Calibrating">
+      <entry brief="calibratingEntry()"/>
+      <exit brief="calibratingExit()"/>
+      <tran trig="Complete" target="../../7">
+       <tran_glyph conn="66,94,3,3,-6,-29,25">
+        <action box="3,-29,10,2"/>
+       </tran_glyph>
+      </tran>
+      <tran trig="RTI">
+       <action brief="doCalibrate()"/>
+       <tran_glyph conn="66,97,3,-1,16">
+        <action box="0,-2,13,4"/>
+       </tran_glyph>
+      </tran>
+      <tran trig="Fault" target="../../7">
+       <action brief="reportFault()"/>
+       <tran_glyph conn="85,95,1,2,5,-24">
+        <action box="0,-11,15,2"/>
+       </tran_glyph>
+      </tran>
+      <state_glyph node="66,87,19,14">
+       <entry box="1,2,14,3"/>
+       <exit box="1,5,15,2"/>
+      </state_glyph>
+     </state>
+     <state name="Idle">
+      <entry brief="idleEntry()"/>
+      <exit brief="idleExit()"/>
+      <tran trig="Drive" target="../../5">
+       <tran_glyph conn="95,70,1,0,10,17">
+        <action box="4,1,10,2"/>
+       </tran_glyph>
+      </tran>
+      <tran trig="Calibrate">
+       <choice target="../../../6">
+        <guard brief="calibrateReady()"/>
+        <choice_glyph conn="73,75,4,0,12">
+         <action box="0,4,15,2"/>
+        </choice_glyph>
+       </choice>
+       <tran_glyph conn="85,70,3,-1,-12,5">
+        <action box="-7,1,10,2"/>
+       </tran_glyph>
+      </tran>
+      <state_glyph node="85,63,10,8">
+       <entry box="1,2,9,2"/>
+       <exit box="1,4,9,2"/>
+      </state_glyph>
+     </state>
+     <state_glyph node="56,39,67,64">
+      <entry box="1,2,26,2"/>
+      <exit box="1,4,27,2"/>
+     </state_glyph>
+    </state>
+    <state name="Off">
+     <entry brief="offEntry()"/>
+     <exit brief="offExit()"/>
+     <tran trig="PowerOn" target="../../1">
+      <tran_glyph conn="51,21,1,0,35,18">
+       <action box="4,-2,10,2"/>
+      </tran_glyph>
+     </tran>
+     <state_glyph node="37,18,14,9">
+      <entry box="1,2,13,2"/>
+      <exit box="1,4,12,2"/>
+     </state_glyph>
+    </state>
+    <state name="Recovery">
+     <entry brief="startRecovery()"/>
+     <exit brief="recoveryExit()"/>
+     <tran trig="Complete" target="../../4">
+      <tran_glyph conn="163,64,1,1,15,28,-17">
+       <action box="3,-2,10,2"/>
+      </tran_glyph>
+     </tran>
+     <tran trig="RTI">
+      <action brief="doSafe()"/>
+      <tran_glyph conn="145,66,3,-1,15">
+       <action box="0,-2,10,2"/>
+      </tran_glyph>
+     </tran>
+     <state_glyph node="145,56,18,14">
+      <entry box="1,2,15,2"/>
+      <exit box="1,4,17,2"/>
+     </state_glyph>
+    </state>
+    <state name="Diagnostics">
+     <entry brief="diagnosticsEntry()"/>
+     <exit brief="diagnosticsExit()"/>
+     <tran trig="Resume" target="../../1">
+      <tran_glyph conn="146,92,3,1,-23">
+       <action box="-12,-2,10,2"/>
+      </tran_glyph>
+     </tran>
+     <tran trig="RTI">
+      <action brief="doDiagnostics()"/>
+      <tran_glyph conn="146,95,3,-1,13">
+       <action box="0,-2,15,2"/>
+      </tran_glyph>
+     </tran>
+     <state_glyph node="146,85,15,12">
+      <entry box="1,2,14,2"/>
+      <exit box="1,4,14,2"/>
+     </state_glyph>
+    </state>
+    <state_diagram size="191,143"/>
+   </statechart>
+  </class>
+ </package>
+</model>

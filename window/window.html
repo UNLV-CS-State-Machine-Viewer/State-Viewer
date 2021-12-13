@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<!-- following section links javascript files with window.html -->
+<head>
+    <title>State Machine Viewer</title>
+    <script src="parser.js"></script>
+    <script src="drawing.js"></script>
+    <script src="interact.js"></script>
+    <script src="sizing.js"></script>
+</head>
+<!-- removes unnecessary scrollbar -->
+<style>::-webkit-scrollbar {width: 0px; height: 0px;}</style>
+
+<!-- following section creates the "Drop File Here" segment in the initial screen w/ listed parameters -->
+<html>
+<div id="header">
+<center>
+<h1 style="font-size:5vh">State Machine Viewer</h1>
+</center>
+</div>
+<div id="dragon" style="font-size:2.5vh; position:fixed; width:90%; height:80%; margin:0 3.5%; border:2px dashed grey; color:grey; text-align:center; line-height:normal;">
+  <p>
+  Welcome to the State Machine Viewer.<br>
+  Upload an XML model file of a State Machine to get started.<br>
+  <span style = "font-size:2.5vh;">
+    For more information on how to use the site click <a id = "helpLink" href = "help.html" target=_blank; >here</a>.
+  </span>
+  <br>
+  <p style="margin-top:10vh;">
+  Drop File Here
+  </p>
+  </p>
+</div>
+<body style="overflow: hidden;">
+<div id='page' style="visibility:hidden;">
+    <div style="display:flex; overflow:hidden;">
+        <div id="guardmenu" style="position:absolute; overflow:scroll;"></div>
+        <div id="buttonmenu" style="position:absolute; overflow:scroll;"></div>
+        <div id="log" style="position:absolute; bottom:0; overflow:scroll; box-shadow: 0px 0px 2px black"></div>
+        <div id="zoommenu" style="position:absolute; right:0;">
+            <button onclick="zoom(1)">+</button>
+            <button onclick="zoom(2)">-</button>
+            <button onclick="zoom(0)">Max</button>
+            <input id="inbox" type="text" onkeydown="input(this)"/>
+        </div>
+        <div id="drawing" style="position:absolute; overflow:scroll; box-shadow: 0px 0px 2px black;">
+          <svg xmlns="http://www.w3.org/2000/svg" id="svg">
+                <defs>
+                    <marker id="head" markerWidth="5" markerHeight="5" refX="0" refY="2.5" orient="auto">
+                        <polygon points="0 0, 5 2.5, 0 5" />
+                    </marker>
+                </defs>
+          </svg>
+        </div>
+    </div>
+</div>
+
+<!-- javascript portion / all tags <script> contain within it javascript -->
+<script>
+// initialization of data "meta-object"
+var data = {size:[0,0], machine:null, state:[], trans:[], guard:[]};
+var size = 1;
+
+// variables used for site creation
+var drawingwidth = 0;
+var buttonwidth = 0;
+var logheight = 0;
+var focuspos = [0,0];
+
+// initialization of main objects
+var states = [];
+var transitions = [];
+var guards = [];
+var buttons = [];
+
+// for all initialized variables in the next block, what gets assigned is an Element object representing the
+// element whose id property matches the specified string.
+const dragon = document.getElementById('dragon');
+const header = document.getElementById('header');
+const svg = document.getElementById("svg");
+const page = document.getElementById("page");
+const log = document.getElementById("log");
+const gmenu = document.getElementById("guardmenu");
+const bmenu = document.getElementById("buttonmenu");
+const zmenu = document.getElementById("zoommenu");
+const inbox = document.getElementById("inbox");
+const ns = 'http://www.w3.org/2000/svg'
+
+// creates variables used to read file that is being dragged/dropped into the initial window
+const reader = new FileReader();
+const parser = new DOMParser();
+//websocket
+const ws = new WebSocket("ws://localhost:8080");
+
+// function that allows for a file to be dropped into the initial window
+dragon.ondrop = function(droppedFile) {
+    droppedFile.preventDefault();
+    const file = droppedFile.dataTransfer.files[0];
+    reader.readAsText(file);
+    reader.onload=function() {
+        var xml, obj;
+        
+        //parse the xml
+        text = reader.result;
+        xml = parser.parseFromString(text,"text/xml");
+        obj = xml.getElementsByTagName("statechart")[0];
+        parse(obj, null, 0);
+        
+        //parse canvas size
+        var sizetx = xml.getElementsByTagName("state_diagram")[0].getAttribute('size');
+        sizetx = sizetx.split(',');
+        var csize = [];
+        sizetx.forEach(e => csize.push(parseInt(e)));
+        data.size = csize;
+        
+        //ready to receive data
+        ws.onmessage = function(e) {
+            var x = e.data.toString();
+            x = x.replace(/'/g, "\"");
+            x = x.replace("\"On,", "\"On\",");
+            console.log(x);
+            receive(x);
+        }
+        
+        //set up page
+        draw(data);
+        createbuttons(data);
+        resize((window.innerWidth - drawingwidth) / data.size[0]);
+        sizer();
+        zoom(0);
+        for (var i = 0; i < states.length; i++) {dolit(false, i);}
+        logger(-2, "Ready");
+        send({"type":"ready"});
+        receive("{\"state\":\"Off\", \"enter\":true}");
+
+        //make page visible
+        dragon.style.display = "none";
+        header.style.display = "none";
+        page.style = 'visibility:visible';
+    }
+}
+
+// lamda function that does as such "on drag over"
+dragon.ondragover = function() {
+    this.style.borderColor = 'black';
+    this.style.color = 'black';
+    return false;
+}
+
+// lamda function that does as such "on drag leave"
+dragon.ondragleave = function() {
+    this.style.borderColor = 'grey';
+    this.style.color = 'grey';
+    return false;
+}
+
+// set of variable initializations/declarations that allow us to set markers
+// to draw, scroll, and hold down the "mouse down" event
+var isDown = false; var startX; var startY; var scrollLeft; var scrollTop;
+
+// lamda function that initiates event upon "mouse down"
+drawing.addEventListener("mousedown", e => {
+    isDown = true;
+    startX = e.pageX - drawing.offsetLeft;
+    startY = e.pageY - drawing.offsetTop;
+    scrollLeft = drawing.scrollLeft;
+    scrollTop = drawing.scrollTop;
+});
+
+// lamda function that initiates event upon "mouse up"
+drawing.addEventListener("mouseup", () => {
+    isDown = false;
+});
+
+// lamda function that initiates event upon "mouse move"
+drawing.addEventListener("mousemove", e => {
+    if (!isDown) return;
+    e.preventDefault();
+    const x = e.pageX - drawing.offsetLeft;
+    const y = e.pageY - drawing.offsetTop;
+    const walk = x - startX;
+    const walka = y - startY;
+    drawing.scrollLeft = scrollLeft - walk;
+    drawing.scrollTop = scrollTop - walka;
+});
+
+// lamda function that resizes window
+(function() {
+    window.onresize = sizer;
+})();
+
+</script>
+</body>
+</html>

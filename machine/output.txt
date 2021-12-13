@@ -1,0 +1,105 @@
+./test
+DeviceImpl_offEntry()
+
+--> PowerOn
+DeviceImpl_offExit()
+DeviceImpl_turnOnPower()
+DeviceImpl_initDevice()
+
+--> Complete
+DeviceImpl_initExit()
+DeviceImpl_idleEntry()
+
+--> Calibrate
+DeviceImpl_calibrateReady() is 1
+DeviceImpl_idleExit()
+DeviceImpl_calibratingEntry()
+
+--> RTI
+DeviceImpl_doCalibrate()
+
+--> RTI
+DeviceImpl_doCalibrate()
+
+--> RTI
+DeviceImpl_doCalibrate()
+
+--> RTI
+DeviceImpl_doCalibrate()
+
+--> Complete
+DeviceImpl_calibratingExit()
+DeviceImpl_idleEntry()
+
+--> Drive
+DeviceImpl_idleExit()
+DeviceImpl_startMotor()
+
+--> RTI
+DeviceImpl_motorControl()
+
+--> RTI
+DeviceImpl_motorControl()
+
+--> RTI
+DeviceImpl_motorControl()
+
+--> Fault
+DeviceImpl_reportFault()
+DeviceImpl_shutOffMotor()
+DeviceImpl_turnOffPower()
+DeviceImpl_startRecovery()
+
+--> RTI
+DeviceImpl_doSafe()
+
+--> RTI
+DeviceImpl_doSafe()
+
+--> RTI
+DeviceImpl_doSafe()
+
+--> Complete
+DeviceImpl_recoveryExit()
+DeviceImpl_diagnosticsEntry()
+
+--> RTI
+DeviceImpl_doDiagnostics()
+
+--> RTI
+DeviceImpl_doDiagnostics()
+
+--> RTI
+DeviceImpl_doDiagnostics()
+
+--> Resume
+DeviceImpl_diagnosticsExit()
+DeviceImpl_turnOnPower()
+DeviceImpl_initDevice()
+
+--> Complete
+DeviceImpl_initExit()
+DeviceImpl_idleEntry()
+
+--> Drive
+DeviceImpl_idleExit()
+DeviceImpl_startMotor()
+
+--> RTI
+DeviceImpl_motorControl()
+
+--> RTI
+DeviceImpl_motorControl()
+
+--> RTI
+DeviceImpl_motorControl()
+
+--> Stop
+DeviceImpl_shutOffMotor()
+DeviceImpl_idleEntry()
+
+--> PowerOff
+DeviceImpl_idleExit()
+DeviceImpl_turnOffPower()
+DeviceImpl_offEntry()
+

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+    <head>
+        <title>
+            SMV Help Info
+        </title>
+        <link rel="stylesheet" href="help.css">
+    </head>
+    <body style = "background:white;">
+        <div>
+            <p> <center>
+                <h1><u>Help Page</u></h1>
+                <h2>
+                * To get started, you will need to drag/drop (upload) an XML model file of a State Machine.
+                <br>* After the file is uploaded, the block diagram will initiate.                         
+
+                </h2>
+
+                <h3>
+                <br><u>Page Layout</u>
+                </h3>
+                <img src="pageLayout.png" width="650 height=auto">
+
+                <h2><br>There are three main sections to interact with on the page.
+                Each section is described in detail below.</h2>
+
+                <h3><u>1. Select an Event:</u></h3> 
+                The events and guards provided in the XML file become buttons that the user can press
+                to send the event. <br>The guard buttons are check boxes to set to true and false.
+                <br>The color of the guard turns green when selected to indicate true. The unchecked box
+                will default to red to indicate the guard is not set. 
+                
+                <h3><u>2. Block Window:</u></h3> 
+                The diagram represents a model of the system with its corresponding states and transitions. 
+                The active state will be highlighted along with the path that that it took to get there.
+
+                <h3><u>3. Results:</u></h3> 
+                This is text log viewer that will update just as the block window updates to record the history of the state machine. 
+
+                <!-- <h3>State Timeline:</h3>  -->
+                
+                <h2><u><br>FAQs:</u></h2>
+
+                <h4>What file types are supported and where are they generated from? </h4>
+                <p class="helpIndent"> The XML model file comes from a UML Statechart Modeling Tool. 
+                    <br>A Computer Aided Software Engineering Tool (CASE) is used to enter UML Statechart
+                    designs and generate a readable XML file with graphics information in it. </p>
+                    <p class="helpIndent"> We recommend to use a .qm file generated from the QM Model-Based Design Tool. </p>
+            
+                <!-- <p class="helpIndent">What can I do with events? </p> -->
+
+                <p> <br> Additional Resources:</p> 
+
+                </center>
+
+            </p>
+        </div>
+    </body>
+</html>

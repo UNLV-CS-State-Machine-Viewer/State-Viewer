@@ -1,0 +1,53 @@
+Command list:
+PowerOff
+Fault
+POR
+Complete
+Stop
+RTI
+Drive
+Calibrate
+PowerOn
+Resume
+Cal_Ready_True
+Cal_Ready_False
+To end the loop type -'END_LOOP'
+RTI
+New VALID event ENTERED: RTI
+
+--> RTI
+DeviceImpl_doCalibrate()
+Command list:
+PowerOff
+Fault
+POR
+Complete
+Stop
+RTI
+Drive
+Calibrate
+PowerOn
+Resume
+Cal_Ready_True
+Cal_Ready_False
+To end the loop type -'END_LOOP'
+Cal_Ready_False
+New VALID event ENTERED: Cal_Ready_False
+Setting calibrteReady to false
+Command list:
+PowerOff
+Fault
+POR
+Complete
+Stop
+RTI
+Drive
+Calibrate
+PowerOn
+Resume
+Cal_Ready_True
+Cal_Ready_False
+To end the loop type -'END_LOOP'
+END_LOOP
+ENDING INPUT LOOP
+
