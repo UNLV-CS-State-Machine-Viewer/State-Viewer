@@ -24,7 +24,7 @@ this can be changed on line 10 of index.js
 
 ### Parser
 
-**/window/parser.js** contains a single function `parse`, and is used to parse the XML file from QM into JSON
+[**/window/parser.js**](./window/parser.js) contains a single function `parse`, and is used to parse the XML file from QM into JSON
 
 if your software produces a different format, you can change this function.
 
