@@ -12,11 +12,11 @@ Run `node index.js` to start the server
 
 After starting the server, the webapp can be accessed at `localhost:8081/window.html`
 
-drag in the example **/machine/Device.qm** file.
+drag in the example [**/machine/Device.qm**](./machine/Device.qm) file.
 
 ### Machine
 
-Currently, the server is configured to run the compiled C++ program **/machine/event_loop**
+Currently, the server is configured to run the compiled C++ program [**/machine/event_loop**](./machine/event_loop)
 
 this can be changed on line 10 of index.js
 
@@ -30,7 +30,7 @@ if your software produces a different format, you can change this function.
 
 ### Interaction
 
-**/window/interact.js** has functions handling the back and forth JSON messages between webapp and machine, namely `send` and `receive`, both expecting a json object
+[**/window/interact.js**](./window/interact.js) has functions handling the back and forth JSON messages between webapp and machine, namely `send` and `receive`, both expecting a json object
 
 currently, the webapp is expecting a message like this when a state is turned on or off:
 
@@ -50,6 +50,6 @@ and sends a message like this to the machine on an event:
 }
 ```
 
-extra processing for this is done in `sendtomachine` function of **index.js**, this is a hack to get current example working with the intermediary JSON messages.
+extra processing for this is done in `sendtomachine` function of [**index.js**](./index.js), this is a hack to get current example working with the intermediary JSON messages.
 
 this file also has a `logger` function for printing out to the log window on the webapp.
