@@ -46,7 +46,7 @@ and sends a message like this to the machine on an event:
 ```json
 {
   "type": "event",
-  "name": "eventname"
+  "name": "turnOnPower"
 }
 ```
 
