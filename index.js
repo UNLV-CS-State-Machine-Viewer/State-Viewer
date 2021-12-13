@@ -6,6 +6,7 @@ app.listen(8081)
 //localhost:8081/window.html
 const wss = new WebSocket.Server({ port: 8080 })
 const cp = require('child_process')
+//machine to run
 const machine = cp.exec('./machine/event_loop')
 
 machine.stdout.on('data', e => {
